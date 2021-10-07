@@ -17,7 +17,14 @@ BATCH_SIZE = 20
 
 
 
-train_datagen = ImageDataGenerator(rescale=1./255)
+train_datagen = ImageDataGenerator(rescale=1./255,
+                                   rotation_range=40,
+                                   width_shift_range=0.2,
+                                   height_shift_range=0.2,
+                                   shear_range=0.2,
+                                   zoom_range=0.2,
+                                   horizontal_flip=True,
+                                   fill_mode='nearest'))
 validation_datagen = ImageDataGenerator(rescale=1./255)     
 
 train_batches = train_datagen.flow_from_directory(dataset_dir + '/train',
@@ -65,7 +72,7 @@ print(model.summary())
 
 model.compile(loss='binary_crossentropy', optimizer=tf.keras.optimizers.RMSprop(lr=1e-4), metrics=['accuracy'])
 
-NUM_EPOCHS = 20
+NUM_EPOCHS = 50
 history = model.fit(train_batches, steps_per_epoch = 100, validation_data = validation_batches, validation_steps = 50, epochs= NUM_EPOCHS)
 model.save('damn.h5')
 
