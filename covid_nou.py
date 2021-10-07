@@ -10,6 +10,32 @@ from numpy import unique
 from numpy import argmax
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
+def plot_acc_loss(result):
+    acc = result.history['accuracy']
+    loss = result.history['loss']
+    val_acc = result.history['val_accuracy']
+    val_loss = result.history['val_loss']
+    pyplot.figure(figsize=(15, 5))
+    pyplot.subplot(121)
+    pyplot.plot(acc, label='Train')
+    pyplot.plot(val_acc, label='Validation')
+    pyplot.title('Accuracy', size=15)
+    pyplot.legend()
+    pyplot.grid(True)
+    pyplot.ylabel('Accuracy')
+    pyplot.xlabel('Epoch')
+    
+    pyplot.subplot(122)
+    pyplot.plot(loss, label='Train')
+    pyplot.plot(val_loss, label='Validation')
+    pyplot.title('Loss', size=15)
+    pyplot.legend()
+    pyplot.grid(True)
+    pyplot.ylabel('Loss')
+    pyplot.xlabel('Epoch')
+    
+    pyplot.show()
+    
 
 dataset_dir  = r"D:\ai intro\dataset"
 IMAGE_SIZE = (150, 150)
@@ -56,55 +82,26 @@ pyplot.show()
 
 in_shape = (IMAGE_SIZE[0], IMAGE_SIZE[1], 3)
 
+from tensorflow.keras.applications import VGG16
+conv_base = VGG16(weights='imagenet', include_top=False, input_shape=in_shape)
+conv_base.summary()
+
 model = Sequential()
-model.add(Conv2D(32, (3, 3), activation='relu',input_shape=in_shape))
-model.add(MaxPool2D((2, 2)))
-model.add(Conv2D(64, (3, 3), activation='relu'))
-model.add(MaxPool2D((2, 2)))
-model.add(Conv2D(128, (3, 3), activation='relu'))
-model.add(MaxPool2D((2, 2)))
-model.add(Conv2D(128, (3, 3), activation='relu'))
-model.add(MaxPool2D((2, 2)))
+model.add(conv_base)
 model.add(Flatten())
-model.add(Dropout(0.5))
-model.add(Dense(512, activation='relu'))
+model.add(Dense(256, activation='relu'))
 model.add(Dense(1, activation='sigmoid'))
-print(model.summary())  
-
+model.summary()
+conv_base.trainable = False
 model.compile(loss='binary_crossentropy', optimizer=tf.keras.optimizers.RMSprop(lr=1e-4), metrics=['accuracy'])
-
-NUM_EPOCHS = 50
+UM_EPOCHS = 30
 history = model.fit(train_batches, steps_per_epoch = 100, validation_data = validation_batches, validation_steps = 50, epochs= NUM_EPOCHS)
-model.save('damn.h5')
+model.save('damn.h5') 
 
-def plot_acc_loss(result):
-    acc = result.history['accuracy']
-    loss = result.history['loss']
-    val_acc = result.history['val_accuracy']
-    val_loss = result.history['val_loss']
-    pyplot.figure(figsize=(15, 5))
-    pyplot.subplot(121)
-    pyplot.plot(acc, label='Train')
-    pyplot.plot(val_acc, label='Validation')
-    pyplot.title('Accuracy', size=15)
-    pyplot.legend()
-    pyplot.grid(True)
-    pyplot.ylabel('Accuracy')
-    pyplot.xlabel('Epoch')
-    
-    pyplot.subplot(122)
-    pyplot.plot(loss, label='Train')
-    pyplot.plot(val_loss, label='Validation')
-    pyplot.title('Loss', size=15)
-    pyplot.legend()
-    pyplot.grid(True)
-    pyplot.ylabel('Loss')
-    pyplot.xlabel('Epoch')
-    
-    pyplot.show()
+
     
 plot_acc_loss(history)
 
 test_generator = validation_datagen.flow_from_directory(dataset_dir + '/test', target_size=(150, 150), batch_size=20, class_mode='binary')
 test_loss, test_acc = model.evaluate_generator(test_generator, steps=50)
-print('test acc:', test_acc)
+print('test acc:', test_acc))
