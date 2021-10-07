@@ -9,7 +9,8 @@ import tensorflow_datasets as tfds
 from numpy import unique
 from numpy import argmax
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-
+from numba import jit 
+@jit
 def plot_acc_loss(result):
     acc = result.history['accuracy']
     loss = result.history['loss']
