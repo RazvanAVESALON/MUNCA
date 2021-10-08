@@ -11,6 +11,20 @@ from numpy import argmax
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 
+import yaml
+# pip install pyyaml
+
+config = None
+with open('config.yml') as f: # reads .yml/.yaml files
+    config = yaml.load(f)
+
+print(type(config))
+print(config)
+print(f"n1 = {config['net']['n1']}", type(config['net']['n1']))
+print(f"opt = {config['train']['opt']}", type(config['train']['opt']))
+print(f"lr = {config['train']['lr']}", type(config['train']['lr']))
+
+
 def plot_acc_loss(result):
     acc = result.history['accuracy']
     loss = result.history['loss']
@@ -38,20 +52,20 @@ def plot_acc_loss(result):
     pyplot.show()
     
 
-dataset_dir  = r"D:\ai intro\AI intro\7. Retele Complet Convolutionale\Date radiografii pulmonare"
-IMAGE_SIZE = (64,64)
-BATCH_SIZE = 20
+dataset_dir  = r"D:\ai intro\dataset"
+IMAGE_SIZE = config['net']['img']
+BATCH_SIZE = config['train']['bs']
 
 
 
-train_datagen = ImageDataGenerator(rescale=1./255,
-                                   rotation_range=40,
-                                   width_shift_range=0.2,
-                                   height_shift_range=0.2,
-                                   shear_range=0.2,
-                                   zoom_range=0.2,
-                                   horizontal_flip=True,
-                                   fill_mode='nearest')
+train_datagen = ImageDataGenerator( rescale=1./255,
+                                    rotation_range=40,
+                                    width_shift_range=0.2,
+                                    height_shift_range=0.2,
+                                    shear_range=0.2,
+                                    zoom_range=0.2,
+                                    horizontal_flip=True,
+                                    fill_mode='nearest')
 validation_datagen = ImageDataGenerator(rescale=1./255)     
 
 train_batches = train_datagen.flow_from_directory(dataset_dir + '/train',
@@ -86,26 +100,26 @@ in_shape = (IMAGE_SIZE[0], IMAGE_SIZE[1], 3)
 from tensorflow.keras.applications import VGG16
 conv_base = VGG16(weights='imagenet', include_top=False, input_shape=in_shape)
 conv_base.summary()
+n1=config['net']['n1']
+n2=config['net']['n2']
+
 
 model = Sequential()
 model.add(conv_base)
 model.add(Flatten())
-model.add(Dense(256, activation='relu'))
-model.add(Dense(1, activation='sigmoid'))
+model.add(Dense(n1, activation='relu'))
+model.add(Dense(n2, activation='sigmoid'))
 model.summary()
-
 conv_base.trainable = False
 
-model.compile(loss='binary_crossentropy', optimizer=tf.keras.optimizers.RMSprop(lr=1e-4), metrics=['accuracy'])
+model.compile(loss='binary_crossentropy', optimizer=tf.keras.optimizers.RMSprop(lr=config['train']['lr']), metrics=['accuracy'])
 
-NUM_EPOCHS = 20
-history = model.fit(train_batches, steps_per_epoch = 100, validation_data = validation_batches, validation_steps = 50, epochs= NUM_EPOCHS)
-model.save('damn.h5') 
+NUM_EPOCHS = config['train']['n_epochs']
+history = model.fit(train_batches, steps_per_epoch = config['train']['steps_per_epoch'], validation_data = validation_batches, validation_steps = config['net']['steps'], epochs= NUM_EPOCHS)
 
+model.save('damn.h5')   
 
-    
 plot_acc_loss(history)
-
-test_generator = validation_datagen.flow_from_directory(dataset_dir + '/test', target_size=(150, 150), batch_size=20, class_mode='binary')
-test_loss, test_acc = model.evaluate_generator(test_generator, steps=50)
+test_generator = validation_datagen.flow_from_directory(dataset_dir + '/test', target_size=config['net']['img'], batch_size=config['train']['bs'], class_mode='binary')
+test_loss, test_acc = model.evaluate_generator(test_generator, steps=config['net']['steps'])
 print('test acc:', test_acc)
