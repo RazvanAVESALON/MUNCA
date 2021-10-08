@@ -101,14 +101,13 @@ from tensorflow.keras.applications import VGG16
 conv_base = VGG16(weights='imagenet', include_top=False, input_shape=in_shape)
 conv_base.summary()
 n1=config['net']['n1']
-n2=config['net']['n2']
 
 
 model = Sequential()
 model.add(conv_base)
 model.add(Flatten())
 model.add(Dense(n1, activation='relu'))
-model.add(Dense(n2, activation='sigmoid'))
+model.add(Dense(1, activation='sigmoid'))
 model.summary()
 conv_base.trainable = False
 
