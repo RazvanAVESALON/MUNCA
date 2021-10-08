@@ -38,8 +38,8 @@ def plot_acc_loss(result):
     pyplot.show()
     
 
-dataset_dir  = r"D:\ai intro\dataset"
-IMAGE_SIZE = (150, 150)
+dataset_dir  = r"D:\ai intro\AI intro\7. Retele Complet Convolutionale\Date radiografii pulmonare"
+IMAGE_SIZE = (64,64)
 BATCH_SIZE = 20
 
 
