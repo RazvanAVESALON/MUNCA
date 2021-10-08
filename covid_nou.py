@@ -99,7 +99,7 @@ conv_base.trainable = False
 model.compile(loss='binary_crossentropy', optimizer=tf.keras.optimizers.RMSprop(lr=1e-4), metrics=['accuracy'])
 
 NUM_EPOCHS = 20
-history = model.fit(train_batches, steps_per_epoch = 50, validation_data = validation_batches, validation_steps = 25, epochs= NUM_EPOCHS)
+history = model.fit(train_batches, steps_per_epoch = 100, validation_data = validation_batches, validation_steps = 50, epochs= NUM_EPOCHS)
 model.save('damn.h5') 
 
 
@@ -107,5 +107,5 @@ model.save('damn.h5')
 plot_acc_loss(history)
 
 test_generator = validation_datagen.flow_from_directory(dataset_dir + '/test', target_size=(150, 150), batch_size=20, class_mode='binary')
-test_loss, test_acc = model.evaluate_generator(test_generator, steps=25)
+test_loss, test_acc = model.evaluate_generator(test_generator, steps=50)
 print('test acc:', test_acc)
