@@ -1,6 +1,6 @@
 net:
   n1: 256
-  img: [150,150]
+  img: [35,35]
   steps: 50
 
 train:
