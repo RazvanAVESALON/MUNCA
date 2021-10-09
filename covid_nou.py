@@ -52,7 +52,7 @@ def plot_acc_loss(result):
     pyplot.show()
     
 
-dataset_dir  = r"D:\ai intro\dataset"
+dataset_dir  = r"D:\ai intro\AI intro\7. Retele Complet Convolutionale\Date radiografii pulmonare"
 IMAGE_SIZE = config['net']['img']
 BATCH_SIZE = config['train']['bs']
 
