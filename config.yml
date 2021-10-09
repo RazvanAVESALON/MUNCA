@@ -1,10 +1,10 @@
 net:
   n1: 256
-  img: [35,35]
+  img: [150,150]
   steps: 50
 
 train:
-  bs: 20
+  bs: 50
   lr: 0.0001
   opt: "RMSprop" # SGD, RMSprop
   n_epochs: 30
