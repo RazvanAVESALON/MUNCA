@@ -9,8 +9,8 @@ import tensorflow_datasets as tfds
 from numpy import unique
 from numpy import argmax
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-
-
+from matplotlib import pyplot
+from tensorflow.keras.applications import VGG16
 import yaml
 # pip install pyyaml
 
@@ -81,7 +81,7 @@ validation_batches = validation_datagen.flow_from_directory(dataset_dir + '/val'
                                                   class_mode="binary")
 
 
-from matplotlib import pyplot
+
 x_test, y_test = next(train_batches)
 print(x_test.shape)
 print(y_test)
@@ -97,7 +97,6 @@ pyplot.show()
 
 in_shape = (IMAGE_SIZE[0], IMAGE_SIZE[1], 3)
 
-from tensorflow.keras.applications import VGG16
 conv_base = VGG16(weights='imagenet', include_top=False, input_shape=in_shape)
 conv_base.summary()
 n1=config['net']['n1']
