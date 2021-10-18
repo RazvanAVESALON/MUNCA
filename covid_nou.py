@@ -79,7 +79,7 @@ validation_batches = validation_datagen.flow_from_directory(dataset_dir + '/val'
                                                   shuffle=True,
                                                   batch_size=BATCH_SIZE,
                                                   class_mode="binary")
-
+print (len(train_batches))
 
 
 x_test, y_test = next(train_batches)
