@@ -52,8 +52,7 @@ def plot_acc_loss(result):
     pyplot.show()
     
 
-dataset_dir  = r"D:\ai intro\AI intro\7. Retele Complet Convolutionale\Date radiografii pulmonare"
-IMAGE_SIZE = config['net']['img']
+dataset_dir  = config['net']['dir']
 BATCH_SIZE = config['train']['bs']
 
 
@@ -69,18 +68,18 @@ train_datagen = ImageDataGenerator( rescale=1./255,
 validation_datagen = ImageDataGenerator(rescale=1./255)     
 
 train_batches = train_datagen.flow_from_directory(dataset_dir + '/train',
-                                                  target_size=IMAGE_SIZE,
+                                                  target_size=config['net']['img'],
                                                   shuffle=True,
                                                   batch_size=BATCH_SIZE,
                                                   class_mode="binary")
 
 validation_batches = validation_datagen.flow_from_directory(dataset_dir + '/val',
-                                                  target_size=IMAGE_SIZE,
+                                                  target_size=config['net']['img'],
                                                   shuffle=True,
                                                   batch_size=BATCH_SIZE,
                                                   class_mode="binary")
 print (len(train_batches))
-
+print (len(validation_batches))
 
 x_test, y_test = next(train_batches)
 print(x_test.shape)
@@ -95,7 +94,7 @@ for i in range(x_test.shape[0]):
     pyplot.imshow(x_test[i], cmap=pyplot.get_cmap('gray'))
 pyplot.show()
 
-in_shape = (IMAGE_SIZE[0], IMAGE_SIZE[1], 3)
+in_shape = (config['net']['img'][0], config['net']['img'][1], 3)
 
 conv_base = VGG16(weights='imagenet', include_top=False, input_shape=in_shape)
 conv_base.summary()
