@@ -1,6 +1,6 @@
 net:
   n1: 256
-  img: [150,150]
+  img: [65,65]
   steps: 68
   dir: "D:\\ai intro\\dataset"
 
