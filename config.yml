@@ -19,4 +19,4 @@ augumentare:
   shear_range: 0.2
   zoom_range: 0.2
   horizontal_flip: False
-  fill_mode: 'nearest'
+  fill_mode: 'reflect'
