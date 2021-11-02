@@ -1,18 +1,18 @@
 net:
   n1: 256
-  img: [65,65]
-  steps: 68
-  dir: "D:\\ai intro\\dataset"
+  img: [128,128]
+  steps: 4
+  dir: "D:\\ai intro\\AI intro\\7. Retele Complet Convolutionale\\Date radiografii pulmonare"
 
 train:
   bs: 20
   lr: 0.0001
   opt: "RMSprop" # SGD, RMSprop
   n_epochs: 15
-  steps_per_epoch: 555
+  steps_per_epoch: 15
 
 augumentare:
-  rescale: 0.3
+  rescale: 0.00392156862745098
   rotation_range: 40
   zca_epsilon: 0.000001
   zca_whitening: False
