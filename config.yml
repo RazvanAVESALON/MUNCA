@@ -12,11 +12,13 @@ train:
   steps_per_epoch: 555
 
 augumentare:
-  rescale: 0.00392156862745098
+  rescale: 0.3
   rotation_range: 40
+  zca_epsilon: 0.000001
+  zca_whitening: False
   width_shift_range: 0.2
   height_shift_range: 0.2
   shear_range: 0.2
   zoom_range: 0.2
-  horizontal_flip: False
-  fill_mode: 'reflect'
+  horizontal_flip: True
+  fill_mode: 'nearest'
